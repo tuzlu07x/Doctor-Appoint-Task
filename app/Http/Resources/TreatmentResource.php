@@ -17,7 +17,7 @@ class TreatmentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'appointments' => AppointmentResource::collection($this->appointments),
+            'appointments' => AppointmentResource::collection($this->whenLoaded('appointments')),
         ];
     }
 }

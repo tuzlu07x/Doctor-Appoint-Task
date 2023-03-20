@@ -9,7 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Treatment extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['clinic_id', 'name'];
+
+    public function clinic(): HasMany
+    {
+        return $this->hasMany(Clinic::class);
+    }
 
     public function appointments(): HasMany
     {
