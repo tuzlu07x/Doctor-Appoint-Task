@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClinicDoctorController;
 use App\Http\Controllers\Clinic\ClinicController;
 
 /*
@@ -20,4 +21,5 @@ Route::post('clinic/register', [ClinicController::class, 'register'])->name('reg
 
 Route::prefix('clinic')->middleware('auth:sanctum')->name('clinic.')->group(function () {
     Route::post('/logout', [ClinicController::class, 'logout'])->name('logout');
+    Route::apiResource('clinic.doctor', ClinicDoctorController::class)->only(['index']);
 });
