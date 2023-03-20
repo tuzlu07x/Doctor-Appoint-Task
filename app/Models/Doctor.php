@@ -29,4 +29,9 @@ class Doctor extends Model implements HasMedia
     {
         return $this->getMedia('image')->last()?->getUrl();
     }
+
+    public function doctorTreatments(): HasMany
+    {
+        return $this->hasMany(DoctorTreatment::class);
+    }
 }
