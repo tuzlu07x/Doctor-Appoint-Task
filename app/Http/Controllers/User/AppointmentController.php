@@ -13,7 +13,12 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $appointments = $user->appointments()->paginate();
+        $appointments = $user->appointments()
+            ->with('doctor', 'treatment')
+            ->where('appointment_date', '>=', now())
+            ->orWhere('is_active', 1)
+            ->orderBy('appointment_date', 'asc')
+            ->paginate();
 
         return AppointmentResource::collection($appointments);
     }
