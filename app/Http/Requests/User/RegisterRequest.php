@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AppointmentRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,10 @@ class AppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'doctor_id' => 'required|integer|exists:doctors,id',
-            'treatment_id' => 'required|integer|exists:treatments,id',
-            'appointment_date' => 'required|date|after_or_equal:today',
-            'appointment_time' => 'required|date_format:H:i',
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|confirmed',
+            'password_confirmation' => 'required|string',
         ];
     }
 }

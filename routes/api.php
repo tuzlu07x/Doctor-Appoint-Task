@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\User\AppointmentController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Clinic\AuthController;
 use App\Http\Controllers\ClinicDoctorController;
 use App\Http\Controllers\DoctorTreatmentController;
 use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\User\AuthController as UserAuthController;
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +32,13 @@ Route::prefix('clinic')->middleware('auth:sanctum')->name('clinic.')->group(func
     Route::get('/doctor/{doctor}/available/appointments', [ClinicDoctorController::class, 'getAvailableAppointments']);
     Route::get('/doctor/{doctor}/purcshed/appointments', [ClinicDoctorController::class, 'purcshedAppointments']);
     Route::post('/clinic/{clinic}/appointment', [ClinicDoctorController::class, 'changeAppointments']);
+});
+
+// Customer Routes
+Route::post('customer/login', [UserAuthController::class, 'login']);
+Route::post('customer/register', [UserAuthController::class, 'register']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('customer/appointment', [AppointmentController::class, 'index']);
+    Route::post('customer/appointment', [AppointmentController::class, 'createAppointment']);
 });
