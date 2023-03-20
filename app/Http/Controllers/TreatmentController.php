@@ -13,10 +13,9 @@ class TreatmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): ResourceCollection
+    public function index(): ResourceCollection
     {
-        $clinic = $request->user();
-        $treatments = $clinic->treatments()->paginate();
+        $treatments = Treatment::with(['appointments', 'doctorTreatments'])->paginate();
 
         return TreatmentResource::collection($treatments);
     }
@@ -24,11 +23,10 @@ class TreatmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TreatmentRequest $request)
+    public function store(TreatmentRequest $request): TreatmentResource
     {
         $data = $request->validated();
-        $clinic = $request->user();
-        $treatment = $clinic->treatments()->create($data);
+        $treatment = Treatment::create($data);
 
         return TreatmentResource::make($treatment);
     }
@@ -36,7 +34,7 @@ class TreatmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TreatmentRequest $request, Treatment $treatment)
+    public function update(TreatmentRequest $request, Treatment $treatment): TreatmentResource
     {
         $data = $request->validated();
         $treatment->update($data);

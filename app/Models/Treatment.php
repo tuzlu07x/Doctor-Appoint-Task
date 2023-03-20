@@ -11,13 +11,13 @@ class Treatment extends Model
     use HasFactory;
     protected $fillable = ['clinic_id', 'name'];
 
-    public function clinic(): HasMany
-    {
-        return $this->hasMany(Clinic::class);
-    }
-
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function doctorTreatments(): HasMany
+    {
+        return $this->hasMany(DoctorTreatments::class);
     }
 }
