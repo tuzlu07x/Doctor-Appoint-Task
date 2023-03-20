@@ -31,18 +31,33 @@ class ClinicDoctorController extends Controller
         return AppointmentResource::collection($appointments);
     }
 
-    public function changeAppointments(Clinic $clinic, Request $request): \Illuminate\Http\JsonResponse
+    public function getAvailableAppointments(Doctor $doctor): \Illuminate\Http\JsonResponse
+    {
+        $appointmentTime = $doctor->available_appointment_time;
+
+        return response()->json([
+            'appointment_time' => $appointmentTime,
+        ], 200);
+    }
+
+    public function changeAppointments(Clinic $clinic, Request $request)
     {
         //Burada belirli doktorların randevuları taskte yazdığı için öyle yaptım.
         $data = $request->validate([
-            'appointment_date' => 'required|date|after:now',
+            'appointment_date' => 'required|date|after_or_equal:today',
+            'appointment_time' => 'required|date_format:H:i',
             'ids' => 'required|array',
         ]);
-        $selectedDoctors = $clinic->doctors()->whereIn('id', $data['ids'])->get();
 
-        foreach ($selectedDoctors as $doctor) {
-            $doctor->appointments()->update([
-                'appointment_date' => $data['appointment_date'],
+        foreach ($clinic->doctors as $doctor) {
+            $hasDate = in_array($data['appointment_time'], $doctor->available_appointment_time);
+            if (!$hasDate) {
+                return response()->json([
+                    'message' => 'This time is not available Please Select ' . implode(',', $doctor->available_appointment_time),
+                ], 400);
+            }
+            $doctor->appointments()->whereIn('id', $data['ids'])->update([
+                'appointment_date' => $data['appointment_date'] . ' ' . $data['appointment_time'],
             ]);
         }
 

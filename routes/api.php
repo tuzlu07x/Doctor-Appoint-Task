@@ -26,6 +26,7 @@ Route::prefix('clinic')->middleware('auth:sanctum')->name('clinic.')->group(func
     Route::apiResource('treatment', TreatmentController::class);
     Route::apiResource('appointment', AppointmentController::class);
     Route::apiResource('doctor.doctorTreatment', DoctorTreatmentController::class);
+    Route::get('/doctor/{doctor}/available/appointments', [ClinicDoctorController::class, 'getAvailableAppointments']);
     Route::get('/doctor/{doctor}/purcshed/appointments', [ClinicDoctorController::class, 'purcshedAppointments']);
     Route::post('/clinic/{clinic}/appointment', [ClinicDoctorController::class, 'changeAppointments']);
 });
