@@ -47,7 +47,7 @@ class TreatmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Treatment $treatment)
+    public function destroy(Treatment $treatment): \Illuminate\Http\JsonResponse
     {
         $treatment->delete();
 
