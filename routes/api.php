@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Clinic\ClinicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('clinic/login', [ClinicController::class, 'login'])->name('login');
+Route::post('clinic/register', [ClinicController::class, 'register'])->name('register');
+
+Route::prefix('clinic')->middleware('auth:sanctum')->name('clinic.')->group(function () {
+    Route::post('/logout', [ClinicController::class, 'logout'])->name('logout');
 });
