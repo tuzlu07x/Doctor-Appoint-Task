@@ -6,6 +6,7 @@ use App\Models\Clinic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Resources\DoctorResource;
+use App\Http\Resources\AppointmentResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ClinicDoctorController extends Controller
@@ -20,35 +21,33 @@ class ClinicDoctorController extends Controller
         return DoctorResource::collection($doctors);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request, Clinic $clinic)
+    public function purcshedAppointments(Doctor $doctor): ResourceCollection
     {
-        //
+        $appointments = $doctor->appointments()
+            ->whereDate('appointment_date', '>=', now())
+            ->where('is_active', true)
+            ->paginate();
+
+        return AppointmentResource::collection($appointments);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Clinic $clinic, Doctor $doctor)
+    public function changeAppointments(Clinic $clinic, Request $request): \Illuminate\Http\JsonResponse
     {
-        //
-    }
+        //Burada belirli doktorların randevuları taskte yazdığı için öyle yaptım.
+        $data = $request->validate([
+            'appointment_date' => 'required|date|after:now',
+            'ids' => 'required|array',
+        ]);
+        $selectedDoctors = $clinic->doctors()->whereIn('id', $data['ids'])->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Clinic $clinic, Doctor $doctor)
-    {
-        //
-    }
+        foreach ($selectedDoctors as $doctor) {
+            $doctor->appointments()->update([
+                'appointment_date' => $data['appointment_date'],
+            ]);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Clinic $clinic, Doctor $doctor)
-    {
-        //
+        return response()->json([
+            'message' => 'Appointments changed successfully',
+        ], 200);
     }
 }

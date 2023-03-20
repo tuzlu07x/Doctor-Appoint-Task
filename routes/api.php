@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Clinic\AuthController;
 use App\Http\Controllers\ClinicDoctorController;
-use App\Http\Controllers\Clinic\ClinicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +16,11 @@ use App\Http\Controllers\Clinic\ClinicController;
 |
 */
 
-Route::post('clinic/login', [ClinicController::class, 'login'])->name('login');
-Route::post('clinic/register', [ClinicController::class, 'register'])->name('register');
+Route::post('clinic/login', [AuthController::class, 'login'])->name('login');
+Route::post('clinic/register', [AuthController::class, 'register'])->name('register');
 
 Route::prefix('clinic')->middleware('auth:sanctum')->name('clinic.')->group(function () {
-    Route::post('/logout', [ClinicController::class, 'logout'])->name('logout');
-    Route::apiResource('clinic.doctor', ClinicDoctorController::class)->only(['index']);
+    Route::apiResource('clinic.doctor', ClinicDoctorController::class);
+    Route::get('/doctor/{doctor}/purcshed/appointments', [ClinicDoctorController::class, 'purcshedAppointments']);
+    Route::post('/clinic/{clinic}/appointment', [ClinicDoctorController::class, 'changeAppointments']);
 });

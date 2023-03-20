@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
-class ClinicController extends Controller
+class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {

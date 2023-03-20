@@ -20,9 +20,10 @@ class AppointmentResource extends JsonResource
             'doctor_id' => $this->doctor_id,
             'treatment_id' => $this->treatment_id,
             'appointment_date' => $this->appointment_date,
-            'user' => new UserResource($this->user),
-            'doctor' => new DoctorResource($this->doctor),
-            'treatment' => new TreatmentResource($this->treatment),
+            'is_active' => $this->is_active,
+            'user' => UserResource::make($this->whenLoaded('user')),
+            'doctor' => DoctorResource::make($this->whenLoaded('doctor')),
+            'treatment' => TreatmentResource::make($this->whenLoaded('treatment')),
         ];
     }
 }
