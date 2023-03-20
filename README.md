@@ -64,3 +64,4 @@ Customer bilgilerini döndürür.
 -   App\Console\Commands\SendAppointmentEnableCommand
 
 Her Saat Başında Saati geçen randevuları pasif hale getirir. (Burada saat başı örnek olarak verilmiştir.)
+php artisan appoinments:enable komutu ile çalışır.
