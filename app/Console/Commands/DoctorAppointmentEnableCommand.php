@@ -27,7 +27,7 @@ class DoctorAppointmentEnableCommand extends Command
     public function handle(): void
     {
         Appointment::whereDate('appointment_date', '<', now())
-            ->orWhere('is_active', true)
+            ->where('is_active', true)
             ->update(['is_active' => false]);
     }
 }
